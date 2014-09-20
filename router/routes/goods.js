@@ -6,7 +6,7 @@ var client = redis.createClient();
 
 router.get('/', function(req, res){
 
-    client.get('allGoods', function(req, obj){
+    client.get('goods', function(req, obj){
         res.send(obj);
     });
 
@@ -14,8 +14,8 @@ router.get('/', function(req, res){
 
 router.post('/', function(req, res) {
 
-    var allGoods = req.param.allGoods;
-    client.set('allGoods', allGoods, function(err, obj){
+    var goods = req.param('goods');
+    client.set('goods', goods, function(err, obj){
         res.send(obj);
     });
 
