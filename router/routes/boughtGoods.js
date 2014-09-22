@@ -26,21 +26,18 @@ router.post('/', function(req, res) {
 
 router.delete('/:name', function(req, res){
 
-//    var deleteItem = req.params.name;
-////    var boughtGoods = req.param('boughtGoods');
-
     client.get('boughtGoods', function(err, obj){
+
         var boughtGoods = JSON.parse(obj);
         var deleteItem = req.params.name;
         _.remove(boughtGoods, function(every){
             return every.item.name === deleteItem;
         });
+
         client.set('boughtGoods', JSON.stringify(boughtGoods), function(err, obj){
             res.send(obj);
         });
     });
-
-
 });
 
 module.exports = router;
