@@ -12,7 +12,6 @@ router.get('/', function(req, res) {
 
 });
 
-
 router.post('/', function(req, res) {
 
     var categories = req.param('categories');
@@ -23,4 +22,19 @@ router.post('/', function(req, res) {
 
 });
 
+router.delete('/:id', function(req, res){
+
+    client.get('categories', function(err, obj){
+
+        var categories = JSON.parse(obj);
+        var deleteCategory = req.params.id;
+        _.remove(categories, function(every){
+            return every.id === deleteCategory;
+        });
+
+        client.set('categories', JSON.stringify(categories), function(err, obj){
+            res.send(obj);
+        });
+    });
+});
 module.exports = router;
