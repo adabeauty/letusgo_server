@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var _ = require('lodash');
+
 var redis = require("redis");
 var client = redis.createClient();
 
@@ -22,14 +24,14 @@ router.post('/', function(req, res) {
 
 });
 
-router.delete('/:id', function(req, res){
+router.delete('/:Id', function(req, res){
 
     client.get('categories', function(err, obj){
 
         var categories = JSON.parse(obj);
-        var deleteCategory = req.params.id;
+        var deleteCategory = req.params.Id;
         _.remove(categories, function(every){
-            return every.id === deleteCategory;
+            return every.Id === deleteCategory;
         });
 
         client.set('categories', JSON.stringify(categories), function(err, obj){
