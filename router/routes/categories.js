@@ -12,9 +12,7 @@ function modifyItem(modifyObject, ID, callback){
         var categories = JSON.parse(obj);
         var index = _.findIndex(categories, {ID: ID});
         categories[index] = modifyObject;
-console.log(categories);
         callback(categories);
-//        return categories;
     });
 }
 
