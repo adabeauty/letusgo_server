@@ -6,6 +6,16 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
+function deleteItem(id){
+
+    client.get('boughtGoods', function(err, obj){
+        var boughtGoods = JSON.parse(obj);
+        _.remove(boughtGoods, function(every){
+            return every.item.Id === id;
+        });
+        return boughtGoods;
+    });
+}
 router.get('/', function(req, res){
 
     client.get('boughtGoods', function(req, obj){
@@ -26,17 +36,11 @@ router.post('/', function(req, res) {
 
 router.delete('/:Id', function(req, res){
 
-    client.get('boughtGoods', function(err, obj){
+    var deleteItemId = JSON.parse(req.params.Id);
 
-        var boughtGoods = JSON.parse(obj);
-        var deleteItem = JSON.parse(req.params.Id);
-        _.remove(boughtGoods, function(every){
-            return every.item.Id === deleteItem;
-        });
-
-        client.set('boughtGoods', JSON.stringify(boughtGoods), function(err, obj){
-            res.send(obj);
-        });
+    var boughtGoods = deleteItem(deleteItemId);
+    client.set('boughtGoods', JSON.stringify(boughtGoods), function(err, obj){
+        res.send(obj);
     });
 });
 
