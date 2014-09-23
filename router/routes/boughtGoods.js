@@ -24,14 +24,14 @@ router.post('/', function(req, res) {
 
 });
 
-router.delete('/:name', function(req, res){
+router.delete('/:Id', function(req, res){
 
     client.get('boughtGoods', function(err, obj){
 
         var boughtGoods = JSON.parse(obj);
-        var deleteItem = req.params.name;
+        var deleteItem = JSON.parse(req.params.Id);
         _.remove(boughtGoods, function(every){
-            return every.item.name === deleteItem;
+            return every.item.Id === deleteItem;
         });
 
         client.set('boughtGoods', JSON.stringify(boughtGoods), function(err, obj){
