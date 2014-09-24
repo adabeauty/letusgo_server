@@ -53,5 +53,16 @@ router.delete('/:Id', function(req, res){
     });
 });
 
+router.put('/:Id', function(req, res){
+
+    var modifyItemId = JSON.parse(req.params.Id);
+    var modifyObject = req.param('good');
+
+    modifyItem(modifyObject, modifyItemId, function(goods){
+        client.set('goods', JSON.stringify(goods), function(err, obj){
+            res.send(obj);
+        });
+    });
+});
 
 module.exports = router;
