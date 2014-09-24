@@ -8,12 +8,23 @@ var client = redis.createClient();
 
 function deleteItem(Id, callback){
 
-    client.get('boughtGoods', function(err, obj){
-        var boughtGoods = JSON.parse(obj);
-        _.remove(boughtGoods, {Id: Id});
-        callback(boughtGoods);
+    client.get('goods', function(err, obj){
+        var goods = JSON.parse(obj);
+        _.remove(goods, {Id: Id});
+        callback(goods);
     });
 }
+
+function modifyItem(modifyObject, Id, callback){
+
+    client.get('goods', function(err, obj){
+        var goods = JSON.parse(obj);
+        var index = _.findIndex(goods, {Id: Id});
+        goods[index] = modifyObject;
+        callback(goods);
+    });
+}
+
 router.get('/', function(req, res){
 
     client.get('goods', function(req, obj){
@@ -41,4 +52,6 @@ router.delete('/:Id', function(req, res){
         });
     });
 });
+
+
 module.exports = router;
