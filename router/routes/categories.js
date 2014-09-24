@@ -10,7 +10,6 @@ function addItem(addObject, callback){
 
     client.get('categories', function(err, obj){
         var categories = JSON.parse(obj);
-        console.log(categories);
         categories.push(addObject);
         callback(categories);
     });
