@@ -17,6 +17,18 @@ function deleteItem(Id, callback){
     });
 }
 
+function modifyItem(modifyObject, Id, callback){
+
+    client.get('boughtGoods', function(err, obj){
+        var boughtGoods = JSON.parse(obj);
+        var index = _.findIndex(boughtGoods, function(every){
+            return every.item.Id === Id;
+        });
+        boughtGoods[index] = modifyObject;
+        callback(boughtGoods);
+    });
+}
+
 router.get('/', function(req, res){
 
     client.get('boughtGoods', function(req, obj){
@@ -44,6 +56,18 @@ router.delete('/:Id', function(req, res){
         });
     });
 
+});
+
+router.put('/:Id', function(req, res){
+
+    var modifyItemId = JSON.parse(req.params.Id);
+    var modifyObject = req.param('boughtGood');
+
+    modifyItem(modifyObject, modifyItemId, function(boughtGoods){
+        client.set('boughtGoods', JSON.stringify(boughtGoods), function(err, obj){
+            res.send(obj);
+        });
+    });
 });
 
 module.exports = router;
