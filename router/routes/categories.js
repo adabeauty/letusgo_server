@@ -41,15 +41,6 @@ router.get('/', function(req, res){
     });
 
 });
-//router.post('/', function(req, res) {
-//
-//    var categories = req.param('categories');
-//
-//    client.set('categories', JSON.stringify(categories), function (err, obj) {
-//        res.send(obj);
-//    });
-//
-//});
 
 router.post('/', function(req, res) {
 
