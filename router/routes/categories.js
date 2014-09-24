@@ -6,6 +6,15 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
+function addItem(addObject, callback){
+
+    client.get('categories', function(err, obj){
+        var categories = JSON.parse(obj);
+        console.log(categories);
+        categories.push(addObject);
+        callback(categories);
+    });
+}
 function deleteItem(ID, callback){
 
     client.get('categories', function(err, obj){
@@ -32,14 +41,25 @@ router.get('/', function(req, res){
     });
 
 });
+//router.post('/', function(req, res) {
+//
+//    var categories = req.param('categories');
+//
+//    client.set('categories', JSON.stringify(categories), function (err, obj) {
+//        res.send(obj);
+//    });
+//
+//});
+
 router.post('/', function(req, res) {
 
-    var categories = req.param('categories');
+    var addObject = req.param('category');
 
-    client.set('categories', JSON.stringify(categories), function (err, obj) {
-        res.send(obj);
+    addItem(addObject, function(categories){
+        client.set('categories', JSON.stringify(categories), function(err, obj) {
+            res.send(obj);
+        });
     });
-
 });
 
 router.delete('/:ID', function(req, res){
@@ -59,7 +79,6 @@ router.put('/:ID', function(req, res){
     var modifyObject = req.param('category');
     modifyItem(modifyObject, modifyItemId, function(categories){
 
-        console.log('categories', categories);
         client.set('categories', JSON.stringify(categories), function(err, obj){
             res.send(obj);
         });
