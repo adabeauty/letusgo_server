@@ -28,7 +28,8 @@ function modifyItem(modifyObject, Id, callback){
 router.get('/', function(req, res){
 
     client.get('goods', function(req, obj){
-        res.send(JSON.parse(obj));
+        var goods = obj || [];
+        res.send(JSON.parse(goods));
     });
 
 });
