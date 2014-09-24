@@ -6,6 +6,15 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
+function addItem(addObject, callback){
+
+    client.get('categories', function(err, obj){
+        var categories = JSON.parse(obj);
+        categories.push(addObject);
+        callback(categories);
+    });
+}
+
 function deleteItem(Id, callback){
 
     client.get('goods', function(err, obj){
