@@ -6,6 +6,14 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
+function deleteItem(Id, callback){
+
+    client.get('boughtGoods', function(err, obj){
+        var boughtGoods = JSON.parse(obj);
+        _.remove(boughtGoods, {Id: Id});
+        callback(boughtGoods);
+    });
+}
 router.get('/', function(req, res){
 
     client.get('goods', function(req, obj){
