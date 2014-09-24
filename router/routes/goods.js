@@ -24,9 +24,9 @@ router.get('/', function(req, res){
 
 router.post('/', function(req, res) {
 
-    var boughtGoods = req.param('goods');
+    var goods = req.param('goods');
 
-    client.set('goods', JSON.stringify(boughtGoods), function(err, obj){
+    client.set('goods', JSON.stringify(goods), function(err, obj){
         res.send(obj);
     });
 
@@ -34,15 +34,9 @@ router.post('/', function(req, res) {
 
 router.delete('/:Id', function(req, res){
 
-    client.get('goods', function(err, obj){
-
-        var goods = JSON.parse(obj);
-        var deleteItem = JSON.parse(req.params.Id);
-        _.remove(goods, function(every){
-            return every.Id === deleteItem;
-        });
-
-        client.set('goods', JSON.stringify(goods), function(err, obj){
+    var deleteItemId = JSON.parse(req.params.Id);
+    deleteItem(deleteItemId, function(goods){
+        client.set('goods', JSON.stringify(goods), function(err, obj) {
             res.send(obj);
         });
     });
