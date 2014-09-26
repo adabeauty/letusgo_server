@@ -6,16 +6,30 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
-//function addItem(addObject, callback){
-//
-//    client.get('categories', function(err, obj){
-//        var categories = JSON.parse(obj);
-//        console.log(categories.length);
-//        console.log(addObject);
-//        categories.push(addObject);
-//        callback(categories);
-//    });
-//}
+function getId(categories){
+
+    if(categories.length === 0){
+        return 1;
+    }else{
+        var lastID = categories[categories.length - 1].ID;
+        var currentID = lastID + 1;
+        return currentID;
+    }
+}
+function addItem(newCategoryName, callback){
+
+    client.get('categories', function(err, obj){
+        var ID = getId(JSON.parse(obj));
+        var addObject = {
+            ID: ID,
+            name: newCategoryName,
+            num: '0'
+        };
+        var categories = JSON.parse(obj);
+        categories.push(addObject);
+        callback(categories);
+    });
+}
 function deleteItem(ID, callback){
 
     client.get('categories', function(err, obj){
@@ -44,22 +58,13 @@ router.get('/', function(req, res){
 
 });
 
-//router.post('/:ID', function(req, res) {
-//
-//    var addObject = req.param('category');
-//
-//    addItem(addObject, function(categories){
-//        client.set('categories', JSON.stringify(categories), function(err, obj) {
-//            res.send(obj);
-//        });
-//    });
-//});
-
 router.post('/', function(req, res) {
 
-    var categories = req.param('categories');
-    client.set('categories', JSON.stringify(categories), function(err, obj) {
-        res.send(obj);
+    var newCategoryName = req.param('newCategory');
+    addItem(newCategoryName, function(categories){
+        client.set('categories', JSON.stringify(categories), function(err, obj) {
+            res.send(obj);
+        });
     });
 });
 
