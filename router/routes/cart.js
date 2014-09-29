@@ -33,7 +33,7 @@ router.get('/', function(req, res){
 
     client.get('cart', function(req, obj){
 
-        var cart = obj || [];
+        var cart = obj || JSON.stringify([]);
         res.send(JSON.parse(cart));
     });
 
