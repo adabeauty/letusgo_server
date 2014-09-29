@@ -6,11 +6,9 @@ var client = redis.createClient();
 
 router.post('/', function(req, res) {
 
-    var emptyData = req.param('emptyData');
-    client.set('boughtGoods', JSON.stringify(emptyData), function(err, obj){
+    client.del('cart', function(err, obj){
         res.send(obj);
     });
-
 });
 
 module.exports = router;
