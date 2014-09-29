@@ -23,7 +23,7 @@ function addItem(newCategoryName, callback){
         var addObject = {
             ID: ID,
             name: newCategoryName,
-            num: '0'
+            num: 0
         };
         var categories = JSON.parse(obj);
         categories.push(addObject);
