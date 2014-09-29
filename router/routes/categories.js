@@ -6,29 +6,31 @@ var _ = require('lodash');
 var redis = require("redis");
 var client = redis.createClient();
 
-function getId(categories){
+function getId(callback){
 
-    if(categories.length === 0){
-        return 1;
-    }else{
-        var lastID = categories[categories.length - 1].ID;
-        var currentID = lastID + 1;
-        return currentID;
-    }
+    client.get('categoryId', function(err, lastId){
+        var currentId = lastId + 1;
+        callback(currentId);
+    });
+
 }
 function addItem(newCategoryName, callback){
 
     client.get('categories', function(err, obj){
-        var ID = getId(JSON.parse(obj));
-        var addObject = {
-            ID: ID,
-            name: newCategoryName,
-            num: 0
-        };
-        var categories = JSON.parse(obj);
-        categories.push(addObject);
-        callback(categories);
+
+        getId(function(ID){
+            var addObject = {
+                ID: ID,
+                name: newCategoryName,
+                num: 0
+            };
+            var categories = JSON.parse(obj);
+            categories.push(addObject);
+            callback(categories);
+        });
+
     });
+
 }
 function deleteItem(ID, callback){
 
@@ -52,7 +54,7 @@ function modifyItem(modifyObject, ID, callback){
 router.get('/', function(req, res){
 
     client.get('categories', function(err, obj){
-        var categories = obj || [];
+        var categories = obj || JSON.stringify([]);
         res.send(JSON.parse(categories));
     });
 
