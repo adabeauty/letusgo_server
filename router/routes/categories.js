@@ -8,8 +8,10 @@ var client = redis.createClient();
 
 function getId(callback){
 
-    client.get('categoryId', function(err, lastId){
-        var currentId = lastId + 1;
+    client.get('categoryId', function(req, obj){
+        var lastId = obj || JSON.stringify(0);
+        var currentId = JSON.parse(lastId) + 1;
+        client.set('categoryId', currentId);
         callback(currentId);
     });
 
@@ -24,7 +26,7 @@ function addItem(newCategoryName, callback){
                 name: newCategoryName,
                 num: 0
             };
-            var categories = JSON.parse(obj);
+            var categories = JSON.parse(obj) || [];
             categories.push(addObject);
             callback(categories);
         });
