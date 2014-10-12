@@ -15,7 +15,6 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
 
     var currentId = req.param('currentId');
-    console.log('currentId:', currentId);
     client.set('categoryId', JSON.stringify(currentId), function(err, obj){
         res.send(obj);
     });
